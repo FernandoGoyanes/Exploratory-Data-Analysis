@@ -1,39 +1,10 @@
-## Getting full dataset
+#Reading, naming and subsetting power consumption data
+power <- read.table("household_power_consumption.txt",skip=1,sep=";")
+names(power) <- c("Date","Time","Global_active_power","Global_reactive_power","Voltage","Global_intensity","Sub_metering_1","Sub_metering_2","Sub_metering_3")
+subpower <- subset(power,power$Date=="1/2/2007" | power$Date =="2/2/2007")
 
-data_full <- read.csv("./Data/household_power_consumption.txt", header=T, sep=';', na.strings="?", 
+#calling the basic plot function
+hist(as.numeric(as.character(subpower$Global_active_power)),col="red",main="Global Active Power",xlab="Global Active Power(kilowatts)")
 
-                      nrows=2075259, check.names=F, stringsAsFactors=F, comment.char="", quote='\"')
-
-data_full$Date <- as.Date(data_full$Date, format="%d/%m/%Y")
-
-
-
-## Subsetting the data
-
-data <- subset(data_full, subset=(Date >= "2007-02-01" & Date <= "2007-02-02"))
-
-rm(data_full)
-
-
-
-## Converting dates
-
-datetime <- paste(as.Date(data$Date), data$Time)
-
-data$Datetime <- as.POSIXct(datetime)
-
-
-
-## Plot 1
-
-hist(data$Global_active_power, main="Global Active Power", 
-
-     xlab="Global Active Power (kilowatts)", ylab="Frequency", col="Red")
-
-
-
-## Saving to file
-
-dev.copy(png, file="plot1.png", height=480, width=480)
-
-dev.off()
+# annotating graph
+title(main="Global Active Power")
